@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cat Food Transition</title>
+  <style>
+    input {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    td {
+      padding: 8px;
+      text-align: center; 
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <form id="form">
+    <label>
+      First food required grams:
+      <input type="number" name="food1" value="65">
+    </label>
+    <label>
+      Second food required grams:
+      <input type="number" name="food2" value="60">
+    </label>
+    <label>
+      Number of days for the transition:
+      <input type="number" name="days" value="5">
+    </label>
+    <input type="submit" value="Do the maths">
+  </form>
+  <table id="result"></table>
+  <script>
+    const form = document.getElementById('form');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const food1 = parseFloat(form.elements['food1'].value);
+      const food2 = parseFloat(form.elements['food2'].value);
+      const days = parseInt(form.elements['days'].value);
+
+      const food1mul = 100 / food1;
+      const food2mul = 100 / food2;
+      const distStep = 100 / days;
+
+      const dist = [];
+
+      for (let i = 0; i < days; i++) {
+        const food1dist = (100 - (distStep * i));
+
+        const food1amount = food1dist / food1mul;
+        const food2amount = (100 - food1dist) / food2mul;
+
+        dist.push([food1amount, food2amount]);
+      }
+
+      result.innerHTML = dist.map((e) => `<tr><td>${e[0]}</td><td>${e[1]}</td></tr>`).join('');
+
+      return false;
+    });
+  </script>
+</body>
+</html>
